@@ -104,8 +104,6 @@ function register_sc_parallax_scroll( $atts ) {
 
             //Get parallax color overlay
             $color_hue = get_post_meta(get_the_id(), 'parallax_meta_ColorOverlay', true);
-            //$color_opacity = absint(get_post_meta(get_the_id(), 'parallax_meta_pheightmob', true));
-            mz_pr($color_hue);
 
             //Get parallax disable options
             $disableParImg=esc_attr(get_post_meta(get_the_id(), 'parallax_meta_DisableParImg', true));
@@ -204,8 +202,11 @@ function register_sc_parallax_scroll( $atts ) {
             if (!$disableParImg || wp_is_mobile()===FALSE){
                 //Only show parallax if not on mobile.
                 //or on a mobile and user wants it
-                //$ParallaxImgStyle='background-image: url('.$thumb_url.');';
-                $ParallaxImgStyle='background: linear-gradient(rgba(255, 0, 0, 0.45), rgba(255, 0, 0, 0.45)), url('.$thumb_url.');';
+                if (isset($color_hue) && ($color_hue != '')){
+                  $ParallaxImgStyle='background: linear-gradient('.$color_hue.', '.$color_hue.'), url('.$thumb_url.');';
+                } else {
+                  $ParallaxImgStyle='background-image: url('.$thumb_url.');';
+                }
             }
 
             //build style tag for background size

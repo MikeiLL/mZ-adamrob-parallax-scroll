@@ -124,7 +124,7 @@
             'section' => 0,
             'sectionorder' => 6,
             'label'=> 'Color Overlay',
-            'desc'  => 'Chose a color to overlay.',
+            'desc'  => 'Chose a color to overlay on image. (Based on https://github.com/BraadMartin/components)',
             'id'    => $prefix.'ColorOverlay',
             'type'  => 'text'
         ),
@@ -328,11 +328,32 @@
     }
     add_action('save_post', 'save_meta_parallax_scroll');
 
-    function adamrob_color_picker_assets($hook_suffix) {
-      // $hook_suffix to apply a check for admin page.
-      wp_enqueue_style( 'wp-color-picker' );
-      wp_enqueue_script( 'adamrob-color-picker', plugins_url('js/adamrob-color-picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+    function adamrob_parallax_admin_enqueue_scripts() {
+
+        wp_enqueue_script(
+            'alpha-color-picker',
+            plugins_url('js/alpha-color-picker.js', __FILE__ ), // Update to where you put the file.
+            array( 'jquery', 'wp-color-picker' ), // You must include these here.
+            null,
+            true
+        );
+
+        wp_enqueue_style(
+            'alpha-color-picker',
+            plugins_url('css/alpha-color-picker.css', __FILE__ ), // Update to where you put the file.
+            array( 'wp-color-picker' ) // You must include these here.
+        );
+
+        // This is the JS file that will contain the trigger script.
+        // Set alpha-color-picker as a dependency here.
+        wp_enqueue_script(
+            'adamrob-admin-js',
+            plugins_url('js/adamrob-color-picker.js', __FILE__ ), // Update to where you put the file.
+            array( 'alpha-color-picker' ),
+            null,
+            true
+        );
     }
-    add_action( 'admin_enqueue_scripts', 'adamrob_color_picker_assets' );
+    add_action( 'admin_enqueue_scripts', 'adamrob_parallax_admin_enqueue_scripts' );
 
 ?>
