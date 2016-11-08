@@ -40,7 +40,7 @@
     $custom_meta_fields = array(
         array(
             'section' => 0,
-            'sectionorder' => 0, 
+            'sectionorder' => 0,
             'label'=> 'Parallax Height',
             'desc'  => 'The height the parallax element should be in pixels. Set to 0 to auto set the height based on the post content. Minimum height is always 100px',
             'id'    => $prefix.'height',
@@ -121,8 +121,16 @@
             'type'  => 'checkbox'
         ),
         array(
+            'section' => 0,
+            'sectionorder' => 6,
+            'label'=> 'Color Overlay',
+            'desc'  => 'Chose a color to overlay.',
+            'id'    => $prefix.'ColorOverlay',
+            'type'  => 'text'
+        ),
+        array(
             'section' => 1,
-            'sectionorder' => 0, 
+            'sectionorder' => 0,
             'label'=> 'Parallax Speed',
             'desc'  => 'The speed of the scrolling background. Value between 1 to 10. 10 being the quickest speed setting. Setting 0 will disable background scrolling',
             'id'    => $prefix.'speed',
@@ -132,7 +140,7 @@
         ),
         array(
             'section' => 1,
-            'sectionorder' => 1, 
+            'sectionorder' => 1,
             'label'=> 'Use Parallax.JS',
             'desc'  => 'Selecting this option will use parallax.js as the parallax engine. Select if the CSS parallax doesnt work as you require. Note that some of the other options may not work as desired with this setting',
             'id'    => $prefix.'parallaxjs',
@@ -171,7 +179,7 @@
         global $custom_meta_fields, $post;
         // Use nonce for verification
         echo '<input type="hidden" name="parallax_scroll_meta_nonce" value="'.wp_create_nonce(basename(__FILE__)).'" />';
-         
+
         // Begin the field table and loop
         echo '<table class="form-table">';
 
@@ -279,17 +287,17 @@
                 echo '</select><br /><span class="description">'.$field['desc'].'</span>';
             break;
 
-        }  
+        }
 
-        echo '</td></tr>'; 
+        echo '</td></tr>';
     }
 
     // Save the Data
     function save_meta_parallax_scroll($post_id) {
         global $custom_meta_fields;
-         
+
         // verify nonce
-        if (!wp_verify_nonce($_POST['parallax_scroll_meta_nonce'], basename(__FILE__))) 
+        if (!wp_verify_nonce($_POST['parallax_scroll_meta_nonce'], basename(__FILE__)))
             return $post_id;
         // check autosave
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
@@ -301,7 +309,7 @@
             } elseif (!current_user_can('edit_post', $post_id)) {
                 return $post_id;
         }
-         
+
         // loop through fields and save the data
         foreach ($custom_meta_fields as $field) {
             $old = esc_attr(get_post_meta($post_id, $field['id'], true));
@@ -310,7 +318,7 @@
             }else{
                 $new = 0;
             }
-            
+
             if (isset($new) && $new != $old) {
                 update_post_meta($post_id, $field['id'], $new);
             } elseif ('' == $new && $old) {
@@ -319,5 +327,12 @@
         } // end foreach
     }
     add_action('save_post', 'save_meta_parallax_scroll');
+
+    function adamrob_color_picker_assets($hook_suffix) {
+      // $hook_suffix to apply a check for admin page.
+      wp_enqueue_style( 'wp-color-picker' );
+      wp_enqueue_script( 'adamrob-color-picker', plugins_url('js/adamrob-color-picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+    }
+    add_action( 'admin_enqueue_scripts', 'adamrob_color_picker_assets' );
 
 ?>

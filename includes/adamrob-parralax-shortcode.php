@@ -37,7 +37,7 @@ function register_sc_parallax_scroll( $atts ) {
 
     //Check for valid ID
     $postid = intval($id);
-    if ($postid==0 || !is_int($postid)){ 
+    if ($postid==0 || !is_int($postid)){
         //Return error
         return '<p><strong>Invalid Parallax ID</strong></p>';
     }
@@ -65,7 +65,7 @@ function register_sc_parallax_scroll( $atts ) {
             //CHECK AND SANITIZE POST INPUTS
 
             // check if the post has a Post Thumbnail assigned to it.
-            if ( !has_post_thumbnail() ) { 
+            if ( !has_post_thumbnail() ) {
                 //Error because of no image
                 wp_reset_postdata();
                 return '<p><strong> No Feature Image Defined!</strong>  Please specify your background image in the featured image meta box on the admin page. For more information please see the help menu from the parallax scroll admin pages.</p>';
@@ -98,9 +98,14 @@ function register_sc_parallax_scroll( $atts ) {
                 $hpos=PARALLAX_DEFHPOS;
             }
 
-            //Get parallaz image size
+            //Get parallax image size
             $psize = absint(get_post_meta(get_the_id(), 'parallax_meta_pheight', true));
             $mobpsize = absint(get_post_meta(get_the_id(), 'parallax_meta_pheightmob', true));
+
+            //Get parallax color overlay
+            $color_hue = get_post_meta(get_the_id(), 'parallax_meta_ColorOverlay', true);
+            //$color_opacity = absint(get_post_meta(get_the_id(), 'parallax_meta_pheightmob', true));
+            mz_pr($color_hue);
 
             //Get parallax disable options
             $disableParImg=esc_attr(get_post_meta(get_the_id(), 'parallax_meta_DisableParImg', true));
@@ -199,7 +204,8 @@ function register_sc_parallax_scroll( $atts ) {
             if (!$disableParImg || wp_is_mobile()===FALSE){
                 //Only show parallax if not on mobile.
                 //or on a mobile and user wants it
-                $ParallaxImgStyle='background-image: url('.$thumb_url.');';
+                //$ParallaxImgStyle='background-image: url('.$thumb_url.');';
+                $ParallaxImgStyle='background: linear-gradient(rgba(255, 0, 0, 0.45), rgba(255, 0, 0, 0.45)), url('.$thumb_url.');';
             }
 
             //build style tag for background size
@@ -221,7 +227,7 @@ function register_sc_parallax_scroll( $atts ) {
                 //Enables us to pad out when in full screen mode
                 $output .= '<div id="parallax_container'.$postid.'" class="parallax-window-container '.$containerFWStyleClass.'">';
             };
-            
+
             //Build the parallax container
             if ($parallaxJS==true){
             	//Use parallax.JS
@@ -232,11 +238,11 @@ function register_sc_parallax_scroll( $atts ) {
             		$parallaxJSpos = " position: relative;";
             	}
             	if ($bgScrollSpeed>=10) $bgScrollSpeed = 9;
-            	$output .= '<div id="parallax_'.$postid.'" class="adamrob_parallax '.$parallaxFWStyleClass.'" 
-            					style="'.$parallaxStyle.$parallaxJSpos.'" 
-            					data-parallax="scroll" data-image-src="'.$thumb_url.'" 
-            					data-z-Index="1" 
-            					data-ios-fix="true" 
+            	$output .= '<div id="parallax_'.$postid.'" class="adamrob_parallax '.$parallaxFWStyleClass.'"
+            					style="'.$parallaxStyle.$parallaxJSpos.'"
+            					data-parallax="scroll" data-image-src="'.$thumb_url.'"
+            					data-z-Index="1"
+            					data-ios-fix="true"
             					data-android-fix="true"
             					data-speed="'.((10-$bgScrollSpeed)*0.1).'">';
 
@@ -250,7 +256,7 @@ function register_sc_parallax_scroll( $atts ) {
 	                $output .= '<section id="parallax_'.$postid.'" class="adamrob_parallax '.$parallaxFWStyleClass.$parallaxScrollingClass.'" style="'.$parallaxStyle.$ParallaxImgStyle.$ParallaxSizeStyle.'" speed="'.$bgScrollSpeed.'">';
 	            }
         	}
-            
+
 
 
             $output .= '<div id="parallax_'.$postid.'_content" class="adamrob_pcontainer" style="'.$parallaxStyle.'">';
@@ -290,7 +296,7 @@ function register_sc_parallax_scroll( $atts ) {
         }
         //Reset query data
         wp_reset_postdata();
-   
+
     } else {
         // none were found
         wp_reset_postdata();
