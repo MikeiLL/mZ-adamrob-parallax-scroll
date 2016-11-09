@@ -267,13 +267,13 @@ function register_sc_parallax_scroll( $atts ) {
                 //Build the title
                 $output .= '<table style="width:100%; height:100%; border-style:none; margin:0;"><tr>';
                 $output .= '<td class="parallax-header" style="text-align:'.$hpos.'; vertical-align:'.$vpos.'; padding:'.$padding.'px; border-style:none;">';
-                $output .= '<div id="parallax_'.$postid.'_posttitle" class="adamrob_parallax_posttitle" style="'.$hStyle.'">' . get_the_title() . '</div>';
+                $output .= '<h2 id="parallax_'.$postid.'_posttitle" class="adamrob_parallax_posttitle" style="'.$hStyle.'">' . get_the_title() . '</h2>';
                 $output .= '</td></tr></table>';
 
             }else{
                 //Build the title
                 $output = $output . '<div id="parallax_'.$postid.'_posttitle" class="adamrob_parallax_posttitle" style="text-align:'.$hpos.'; padding:'.$padding.'px;">';
-                $output = $output . '<div style="'.$hStyle.'">' . get_the_title() . '</div>';
+                $output = $output . '<h2 style="'.$hStyle.'">' . get_the_title() . '</h2>';
                 $output = $output . '</div>';
 
                 //Build the content
